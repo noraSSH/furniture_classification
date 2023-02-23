@@ -1,11 +1,22 @@
-# syntax=docker/dockerfile:1
-FROM busybox:latest
-COPY --chmod=755 <<EOF /app/run.sh
-#!/bin/sh
-while true; do
-  echo -ne "The time is now $(date +%T)\\r"
-  sleep 1
-done
-EOF
+# start by pulling the python image
+FROM python:3.7
 
-ENTRYPOINT /app/run.sh
+# copy the requirements file into the image
+COPY ./requirements.txt /app/requirements.txt
+
+# switch working directory
+WORKDIR /app
+
+# install the dependencies and packages in the requirements file
+RUN pip install -r requirements.txt
+
+EXPOSE 5000
+EXPOSE 80
+
+# copy every content from the local file to the image
+COPY . /app
+
+# configure the container to run in an executed manner
+ENTRYPOINT [ "python" ]
+
+CMD ["app.py" ]
