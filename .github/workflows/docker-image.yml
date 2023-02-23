@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       app:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/norarepo:v0.6
+        image: norassh98/norarepo:v0.6
         ports: 
           - 5000:5000
     
