@@ -24,7 +24,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       -
         name: Run docker container
-        run: docker run -p 5000:5000 norassh98/noraapp:latest
+        run: docker run -p 5000:5000 norassh98/norarepo:v0.6
         # name: Build and push
         # uses: docker/build-push-action@v4
         # with:
