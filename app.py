@@ -7,19 +7,22 @@ import torch.nn as nn
 import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
-# import matplotlib.pyplot as plt
 import time
 from PIL import Image
 
 UPLOAD_FOLDER = 'static/uploads/'
-data_transforms = transforms.Compose([
+DATA_TRANSFORMS = transforms.Compose([
         transforms.Resize([256, 256]),
         transforms.CenterCrop(224),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-class_names = {0: 'Bed', 1: 'Chair', 2: 'Sofa'}
+CLASS_NAMES = {0: 'Bed', 1: 'Chair', 2: 'Sofa'}
+MODEL_RESNET = models.resnet50(pretrained=True)
+MODEL_RESNET.fc = nn.Linear(MODEL_RESNET.fc.in_features, 3)
+MODEL_RESNET.load_state_dict(torch.load('model_resnet50.pt'))
+MODEL_RESNET.eval()
 
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -33,15 +36,10 @@ def allowed_file(filename):
 
 def predict(image_path):
     image_data = Image.open(image_path)
-    image_transformed = torch.unsqueeze(data_transforms(image_data), 0)   
-    model_resnet = models.resnet50(pretrained=True)
-    num_fc = model_resnet.fc.in_features
-    model_resnet.fc = nn.Linear(num_fc, 3)
-    model_resnet.load_state_dict(torch.load('model_resnet50.pt'))
-    model_resnet.eval()
-    outputs = model_resnet(image_transformed)
+    image_transformed = torch.unsqueeze(DATA_TRANSFORMS(image_data), 0)   
+    outputs = MODEL_RESNET(image_transformed)
     _, preds = torch.max(outputs, 1)
-    return class_names[preds.item()]
+    return CLASS_NAMES[preds.item()]
 
 @app.route('/')
 def upload_form():
