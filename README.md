@@ -9,10 +9,12 @@ This project aims at performing classification tasks on furniture images with ta
 
 - [Description](#description)
 - [Installation](#installation)
-  - [Docker](#Docker)
+  - [Docker](#docker)
   - [Terminal](#terminal)
 - [Usage](#usage)
+- [Workflow](#workflow)
 
+<a name="description"/>
 ## Description
 
 The application deploys a Deep Learning model which utilizes the transfer learning functionality of PyTorch framework. It combines the feature extrator of ResNet50 from torch.models with a customized fully-connected layer to perform the final classification. The model achieves a high validation accuracy of 97.78% on the validation set.
@@ -30,7 +32,9 @@ The project implements CI/CD pipeline using Github Action which enables the buil
  - templates/: stores the html files for rendering in the Flask application
  - static/uploads: stores the uploaded images
 
+<a name="installation"/>
 ## Installation
+<a name="docker"/>
 ### Docker
 _Note: the stable version of Docker image is: norassh98/norarepo:v0.6
 To run the application through Docker, you can run the following commands on your terminal:
@@ -40,6 +44,7 @@ To run the application through Docker, you can run the following commands on you
 ```
 Make sure Docker is installed on your machine.
 
+<a name="terminal"/>
 ### Terminal
 You can also run python app.py to start the application if your environment satisfies the dependencies in requirements.txt.
 
@@ -47,7 +52,7 @@ To run predict.py, make sure that your environment satisfies the dependencies in
 ```markdown
   python predict.py *path_to_image*
 ```
-
+<a name="usage"/>
 ## Usage
 _Note: as the CNN model is quite large (exceeding 90M), the setup and running speed might be slow. Please be patient with the application.
 
@@ -61,3 +66,7 @@ After the image is uploaded, click on "Submit" and wait for the application to a
 
 Here comes the result!
 ![Alt text](img/Four.PNG?raw=true "Result!")
+
+<a name="workflow"/>
+## Workflow
+The project implements a CI/CD pipeline of push/PR -> Docker image build -> Docker image push, ensuring the continuous integration of the code.
